@@ -199,6 +199,7 @@ const CONFIG = {
   occasion: "अक्षय नवमी",
   venue: "शिव नगर पार्क, सरदार पटेल स्कूल के आगे निकट बाघम्बरी मठ, प्रयागराज",
   mapsLink: "https://maps.app.goo.gl/m511RXgUi1ovL7Zr6",
+  inviteLink: "https://kartikeysaran.github.io/hari-nimantran/",
   menu: "दाल चावल बाटी चोखा एवं खीर",
   people: [
     { name: "हरी ॐ",       line1: "वि•वि•खं•",   line2: "यमुनापार",    phone: "9415615218" },
@@ -244,24 +245,25 @@ $("calBtn").href = "https://calendar.google.com/calendar/render?action=TEMPLATE"
   + "&location=" + encodeURIComponent(CONFIG.venue)
   + "&details=" + encodeURIComponent(CONFIG.occasion + " प्रसाद: " + CONFIG.menu);
 
-const share =
-`🪔 *॥ हरि आमंत्रण ॥* 🪔
+const en = t => t.replace(/[०-९]/g, d => "०१२३४५६७८९".indexOf(d));
+const share = en(
+`✨ *॥ हरि आमंत्रण ॥* ✨
 
-_मङ्गलम् भगवान विष्णुः मङ्गलम् गरुणध्वजः।
-मङ्गलम् पुण्डरी काक्षः मङ्गलाय तनो हरिः॥_
+मङ्गलम् भगवान विष्णुः मङ्गलम् गरुणध्वजः।
+मङ्गलम् पुण्डरी काक्षः मङ्गलाय तनो हरिः॥
 
 मान्यवर महोदय, जगत पालनहार भगवान विष्णु की परम कृपा से प्रतिवर्ष की भांति इस वर्ष भी *${CONFIG.occasion}* के पावन तिथि दिन *${dayName} (${dateHi})* आंवले के वृक्ष के नीचे बने हुए श्री प्रभु प्रसाद (${CONFIG.menu}) प्राप्त करने हेतु आप सादर आमंत्रित हैं।
 
-📅 *तिथि:* ${dayName}, ${dateHi}
-🕰️ *समय:* ${timeHi}
-📍 *स्थान:* ${CONFIG.venue}
+☀️ *तिथि:* ${dayName}, ${dateHi}
+⏰ *समय:* ${timeHi}
+⛳ *स्थान:* ${CONFIG.venue}
 (कृपया समय का विशेष ध्यान रखें)
 
-💌 *पूरा निमंत्रण देखने के लिए यहाँ दबाएँ* 👉 ${location.href}
+✉️ *पूरा निमंत्रण देखने के लिए यहाँ दबाएँ* ➡️ ${CONFIG.inviteLink}
 
-🙏 *निवेदक:* ${CONFIG.people.map(p => p.name).join(", ")}
-जय श्री हरि 🙏`;
-$("waBtn").href = "https://wa.me/?text=" + encodeURIComponent(share);
+*निवेदक:* ${CONFIG.people.map(p => p.name).join(", ")}
+॥ जय श्री हरि ॥`);
+$("waBtn").href = "https://api.whatsapp.com/send?text=" + encodeURIComponent(share);
 
 function tick(){
   const diff = start - new Date();
