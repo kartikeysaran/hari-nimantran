@@ -205,7 +205,7 @@
   </div>
 </section>
 
-<section class="block reveal">
+<section class="block reveal" id="sampark">
   <p class="eyebrow">निवेदक</p>
   <h2>संपर्क सूत्र</h2>
   <svg class="divider" viewBox="0 0 120 14"><path d="M0 7h46M74 7h46" stroke="#c9962b"/><circle cx="60" cy="7" r="5" fill="#f28c18"/><circle cx="50" cy="7" r="2" fill="#c9962b"/><circle cx="70" cy="7" r="2" fill="#c9962b"/></svg>
@@ -233,7 +233,7 @@ const CONFIG = {
   menu: "दाल चावल बाटी चोखा एवं खीर",
   people: [
     { name: "हरी ॐ",       line1: "वि•वि•खं•",   line2: "यमुनापार",    phone: "9415615218" },
-    { name: "राज मिश्रा",   line1: "वि•वि•न•खं•", line2: "कल्याणीपुर", phone: "9935321428" },
+    { name: "राज मिश्रा",   line1: "वि•वि•न•खं•", line2: "कल्याणीदेवी", phone: "9935321428" },
     { name: "शाज़िया अनस", line1: "वि•वि•खं•",   line2: "यमुनापार",    phone: "6386329858" }
   ]
 };
@@ -379,11 +379,12 @@ function updateHint(){
   $("hintText").textContent = end ? "निमंत्रण बंद करें" : "नीचे देखें";
   $("hintArr").textContent  = end ? "✕" : "⬇";
 }
+// page positions measured without the slide-in animation offset
+const docTop = el => { let y = 0; while (el){ y += el.offsetTop; el = el.offsetParent; } return y; };
 function prasadY(){
   const sec = $("prasad"), card = sec.querySelector(".card");
-  const top = sec.querySelector(".eyebrow").getBoundingClientRect().top + scrollY;
-  const cTop = card.getBoundingClientRect().top + scrollY;
-  const bottom = card.getBoundingClientRect().bottom + scrollY;
+  const top = docTop(sec.querySelector(".eyebrow"));
+  const cTop = docTop(card), bottom = cTop + card.offsetHeight;
   const free = innerHeight - BTN_SPACE;
   if (bottom - top < free) return top - (free - (bottom - top)) / 2;   // whole section fits: centre it
   if (bottom - cTop < free - 12) return bottom - free + 8;              // card fits: keep its buttons above ours
@@ -396,9 +397,12 @@ hint.addEventListener("click", () => {
     scrollTo(0, 0);
     return;
   }
-  const y = prasadY();
-  if (scrollY < y - 10) scrollTo({top: y, behavior: "smooth"});                              // step 1: प्रसाद विवरण
-  else scrollTo({top: document.documentElement.scrollHeight, behavior: "smooth"});         // step 2: संपर्क + WhatsApp
+  const maxY = document.documentElement.scrollHeight - innerHeight;
+  const y1 = Math.min(prasadY(), maxY);
+  const y2 = Math.min(docTop($("sampark").querySelector(".eyebrow")) - 16, maxY);
+  if (scrollY < y1 - 10)      scrollTo({top: y1, behavior: "smooth"});    // step 1: प्रसाद विवरण
+  else if (scrollY < y2 - 10) scrollTo({top: y2, behavior: "smooth"});    // step 2: निवेदक / संपर्क सूत्र
+  else                        scrollTo({top: maxY, behavior: "smooth"});  // step 3: WhatsApp
 });
 $("openBtn").addEventListener("click", () => {
   $("gate").classList.add("hide"); petals(40); scrollTo(0, 0);
